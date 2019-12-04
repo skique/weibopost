@@ -214,9 +214,40 @@ j = schedule.scheduleJob(rule, async () => { // 定时任务
     }
 });
 ```
-### 触发任务
-`node index.js`
+### docker部署
+#### 创建Dockerfile文件
+```
+# 这里是别人已经搭建好的的一个puppeteer运行换季环境                                                           
+FROM buildkite/puppeteer                                                                         
+                                                                                                 
+WORKDIR /app                                                                                     
+                                                                                                 
+# 把当当前目录的模样   所有内容都拷贝到 app工作目录                                                                   
+COPY . /app                                                                                      
+                                                                                                 
+                                                                                                 
+RUN npm install -g yarn                                                                          
+RUN yarn install                                                                                 
+                                                                                                 
+# 完成  
+```
+#### 创建Docker镜像
+```
+# 不要忘记最后有一个点
+docker build --tag=pptr-image .
 
+# 这里我们把镜像的名称叫做pptr-image
+# 创建镜像需要一些时间，请耐心等待
+```
+#### 使用我们刚刚创建的镜像启动一个实例（实例也称为container）
+```
+docker run -it pptr-image bash
+
+# 然后在出现的新的命令行交互界面敲击
+
+node index.js
+```   
+如你所见，我们的puppeteer应用程序正常启动并且正常运行了，这一切多亏了Docker还有别人已经给我们做好的 buildkite/puppeteer 镜像，这个镜像中已经安装好了 pptr 在linux环境运行时候所需要的一些环境依赖。
 
 
 源码地址：[github地址](https://github.com/skique/weibopost.git)

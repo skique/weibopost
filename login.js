@@ -46,9 +46,12 @@ async function operation(browser) {
 
 async function login(username, password) {
     const browser = await puppeteer.launch({
-        headless: false,
         slowMo: 250,
-        executablePath: ''
+        executablePath: '',
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+        ]
     });
     const page = (await browser.pages())[0];
     await page.setViewport({

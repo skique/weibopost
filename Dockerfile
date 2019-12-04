@@ -1,15 +1,13 @@
-FROM node:10-alpine
-LABEL MAINTAINER="taoyouyou"
-RUN apk update && apk upgrade && \
-    echo http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
-    echo http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
-    apk add --no-cache \
-      zlib-dev \
-      xvfb \
-      xorg-server \
-      dbus \
-      ttf-freefont \
-      chromium \
-      nss \
-      ca-certificates \
-      dumb-init
+# 这里是别人已经搭建好的的一个pupptr运行换季环境                                                           
+FROM buildkite/puppeteer                                                                         
+                                                                                                 
+WORKDIR /app                                                                                     
+                                                                                                 
+# 把当当前目录的模样   所有内容都拷贝到 app工作目录                                                                   
+COPY . /app                                                                                      
+                                                                                                 
+                                                                                                 
+RUN npm install -g yarn                                                                          
+RUN yarn install                                                                                 
+                                                                                                 
+# 完成  
