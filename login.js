@@ -17,55 +17,8 @@ function readSyncByRl(tips) {
     });
 }
 
-async function login(username, password) {
-    const browser = await puppeteer.launch({
-        headless: false,
-        slowMo: 250,
-        executablePath: ''
-    });
+async function operation(browser) {
     const page = (await browser.pages())[0];
-    await page.setViewport({
-        width: 1280,
-        height: 800
-    });
-
-    await page.goto("https://weibo.com/");
-    await page.waitForNavigation();
-    await page.type("#loginname", username); // 输入用户名
-    await page.type("#pl_login_form > div > div:nth-child(3) > div.info_list.password > div > input", password);   // 输入密码
-    await page.click("#pl_login_form > div > div:nth-child(3) > div:nth-child(6)");  // 点击登录
-    await page.waitForNavigation();
-    // await page.waitForNavigation().then(result => {
-    //     return new Promise((resolve) => {
-    //         page.cookies().then(async cookie => {
-    //             fs.createWriteStream("cookie.txt").write(JSON.stringify(cookie), "UTF8");//存储cookie
-                // await browser.close();//关闭打开的浏览器
-    //             resolve(cookie);
-    //         });
-    //     })
-    // }).catch(e => {
-    //     page.screenshot({
-    //         path: 'code.png',
-    //         type: 'png',
-    //         x: 800,
-    //         y: 200,
-    //         width: 100,
-    //         height: 100
-    //     });
-    //     return new Promise((resolve, reject) => {
-    //         readSyncByRl("请输入验证码").then(async (code) => {
-    //             await page.type("#pl_login_form > div > div:nth-child(3) > div.info_list.verify.clearfix > div > input", code);
-    //             await page.click("#pl_login_form > div > div:nth-child(3) > div:nth-child(6)");
-    //             await page.waitForNavigation();
-    //             page.cookies().then(async cookie => {
-    //                 fs.createWriteStream("cookie.txt").write(JSON.stringify(cookie), "UTF8");
-                    // await browser.close();
-    //                 resolve(cookie);
-    //             });
-
-    //         })
-    //     })
-    // })
     await page.type(".gn_search_v2>input", searchText);  // 等待新窗口加载后 搜索框输入“盘石”
     await page.click(".gn_search_v2>a");  // 点击搜索
     await page.waitFor(3000);
@@ -89,5 +42,46 @@ async function login(username, password) {
     await page2.click('div.content > div.layer_forward > div > div:nth-child(2) > div > div.WB_feed_repeat.forward_rpt1 > div > div.WB_feed_publish.clearfix > div > div.p_opt.clearfix > div.btn.W_fr > a');
     await page.waitFor(1000);
     await browser.close();//关闭打开的浏览器
+}
+
+async function login(username, password) {
+    const browser = await puppeteer.launch({
+        headless: false,
+        slowMo: 250,
+        executablePath: ''
+    });
+    const page = (await browser.pages())[0];
+    await page.setViewport({
+        width: 1280,
+        height: 800
+    });
+
+    await page.goto("https://weibo.com/");
+    await page.waitForNavigation();
+    await page.type("#loginname", username); // 输入用户名
+    await page.type("#pl_login_form > div > div:nth-child(3) > div.info_list.password > div > input", password);   // 输入密码
+    await page.click("#pl_login_form > div > div:nth-child(3) > div:nth-child(6)");  // 点击登录
+    await page.waitForNavigation().then(result => {
+        return new Promise((resolve) => {
+            operation(browser);
+        })
+    }).catch(e => {
+        page.screenshot({
+            path: 'code.png',
+            type: 'png',
+            x: 800,
+            y: 200,
+            width: 100,
+            height: 100
+        });
+        return new Promise((resolve, reject) => {
+            readSyncByRl("请输入验证码").then(async (code) => {
+                await page.type("#pl_login_form > div > div:nth-child(3) > div.info_list.verify.clearfix > div > input", code);
+                await page.click("#pl_login_form > div > div:nth-child(3) > div:nth-child(6)");
+                await page.waitForNavigation();
+                operation(browser);
+            })
+        })
+    })
 }
 module.exports = login;
