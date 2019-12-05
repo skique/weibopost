@@ -7,7 +7,8 @@ WORKDIR /app
 COPY . /app                                                                                      
                                                                                                  
                                                                                                  
-RUN npm install -g yarn                                                                          
-RUN yarn install                                                                                 
+RUN npm install -g yarn   \                                                                       
+  && yarn install   \
+  && node index.js                                                                   
                                                                                                  
 # 完成  
