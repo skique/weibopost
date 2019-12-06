@@ -7,7 +7,8 @@ WORKDIR /app
 COPY . /app                                                                                      
                                                                                                  
                                                                                                  
-RUN npm install -g yarn                                                                          
-RUN yarn install                                                                                 
+RUN npm install -g yarn \                                                                         
+ && yarn install        \
+ && npm run start                                                                             
                                                                                                  
 # 完成  

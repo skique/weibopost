@@ -46,6 +46,7 @@ async function operation(browser) {
 
 async function login(username, password) {
     const browser = await puppeteer.launch({
+        // headless: false,
         slowMo: 250,
         executablePath: '',
         args: [

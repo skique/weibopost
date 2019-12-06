@@ -13,7 +13,7 @@ function timing() {
     let rule = null;
     rule = new schedule.RecurrenceRule();
     rule.dayOfWeek = [new schedule.Range(1, 6)];
-    rule.hour = 11;
+    rule.hour = 12;
     rule.minute = 0;
     try {
         login(config.username, config.password);
