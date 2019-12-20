@@ -45,7 +45,7 @@ async function operation(browser) {
 }
 
 async function login(username, password) {
-    console.log('开始执行任务')
+    console.log('开始执行任务~')
     const browser = await puppeteer.launch({
         // headless: false,
         slowMo: 250,
