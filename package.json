@@ -12,7 +12,7 @@
   "devDependencies": {
     "node-cmd": "^3.0.0",
     "node-schedule": "^1.3.2",
-    "pm2": "^4.2.0",
+    "pm2": "^5.2.0",
     "puppeteer": "^1.13.0"
   }
 }
